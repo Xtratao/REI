@@ -245,7 +245,7 @@ public class TFIDF {
 		Normalizer tokenizerAllWords = new FrenchTokenizer();
 		Normalizer tokenizerNoStopWords = new FrenchTokenizer(new File(STOPWORDS_FILENAME));
 
-		getWeightFiles(new File(DIRNAME_Mouhcine),new File(new File(DIRNAME_Mouhcine+"/.."), outDirName),stemmerAllWords);
+		getWeightFiles(new File(DIRNAME_Mouhcine),new File(new File(DIRNAME_Mouhcine+"/.."), outDirName),stemmerNoStopWords);
 
 		
 	}
