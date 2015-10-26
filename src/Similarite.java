@@ -7,15 +7,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import tools.FrenchStemmer;
 
 
 public class Similarite {
 	
-	protected static String DIRNAME_Mouhcine = "/Users/Mouhcine/Documents/workspace/ProjetREI/lemonde-utf8";
+	/**
+	 * Le répertoire du corpus
+	 */
+	protected static String DIRNAME = "lemonde-utf8";
 	
-	private static String STOPWORDS_FILENAME = "/Users/Mouhcine/Documents/Etudes/Traitement de text/TP1/frenchST.txt";
+	/**
+	 * Le fichier contenant les mots vides
+	 */
+	private static String STOPWORDS_FILENAME = "./frenchST.txt";
 
 	/**
 	 * renvoi le score de similarité entre les deux documents en utilisant la formule de cos
@@ -75,8 +82,9 @@ public class Similarite {
 	 * @throws IOException 
 	 */
 	
-	public static void getSimilarDocuments(File file, File dir) throws IOException
+	public static TreeSet<String> getSimilarDocuments(File file, File dir) throws IOException
 	{
+		
 		if (dir.isDirectory()) {
 			String[] fileNames = dir.list();
 			
@@ -86,17 +94,18 @@ public class Similarite {
 		
 			for (String fileName : fileNames) 
 				{
-
+					
 					System.out.println(fileName +"\t"+ getSimilarity(file, new File(dir.getAbsolutePath()+"/"+fileName)));
 				}
 			
 		}
+		return null;
 	}
 	
 	public static void main(String[] args) throws IOException 
 	{
 		//System.out.println(getSimilarity(new File(DIRNAME_Mouhcine+"/../outTfIdf/texte.95-1.poids"),new File(DIRNAME_Mouhcine+"/../outTfIdf/texte.95-1.poids")));
-		getSimilarDocuments(new File(DIRNAME_Mouhcine+"/../outTfIdf/texte.95-1.poids"),new File(DIRNAME_Mouhcine+"/../outTfIdf"));
+		getSimilarDocuments(new File(DIRNAME+"/../outTfIdf/texte.95-1.poids"),new File(DIRNAME+"/../outTfIdf"));
 	}
 	
 }

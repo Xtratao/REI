@@ -14,12 +14,12 @@ public class Indexation {
 	/**
 	 * Le répertoire du corpus
 	 */
-	protected static String DIRNAME_Mouhcine = "/Users/Mouhcine/Documents/workspace/ProjetREI/lemonde-utf8";
+	protected static String DIRNAME = "lemonde-utf8";
 	
 	/**
 	 * Le fichier contenant les mots vides
 	 */
-	private static String STOPWORDS_FILENAME = "/Users/Mouhcine/Documents/Etudes/Traitement de text/TP1/frenchST.txt";
+	private static String STOPWORDS_FILENAME = "./frenchST.txt";
 
 
 	/**
@@ -67,36 +67,18 @@ public class Indexation {
 	public static void saveInvertedFile(TreeMap<String, TreeSet<String>> invertedFile, File outFile)
 			throws IOException
 	{
-		PrintWriter out = new PrintWriter (outFile);
-		String s="";
-		int i=0;
-		TreeSet<String> liste = new TreeSet<String>();
-		int length= 0;
-		for(Map.Entry<String, TreeSet<String>> l : invertedFile.entrySet())
-		{	
-			s="";
-			i=0;
-			s=l.getKey().toString() + "\t" + l.getValue().size() + "\t";
-			liste = l.getValue();
-			length = liste.size();
-			for(String S : liste)
-			{
-				i++;					
-				if(i==length)
-					s+= S;										
-				else
-					s+= S+",";				
-			}
-			
-			out.println(s);
-			
+		PrintWriter out = new PrintWriter(outFile);
+		// Ecriture des mots
+		for (Map.Entry<String, TreeSet<String>> elt : invertedFile.entrySet()){
+			int length = elt.getValue().toString().length();
+			out.println(elt.getKey() + "\t"+ elt.getValue().size()+"\t" + elt.getValue().toString().substring(1, length-1));		
 		}
 		out.close();
 	}
 	
 	public static void main(String[] args) throws IOException 
 	{
-		saveInvertedFile(getInvertedFile(new File(DIRNAME_Mouhcine), new FrenchStemmer()),new File(DIRNAME_Mouhcine+"/../fichierInverse.txt"));
+		saveInvertedFile(getInvertedFile(new File(DIRNAME), new FrenchStemmer()),new File(DIRNAME+"/../fichierInverse.txt"));
 
 	}
 	

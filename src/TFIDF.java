@@ -17,13 +17,12 @@ public class TFIDF {
 	/**
 	 * Le répertoire du corpus
 	 */
-	protected static String DIRNAME_Mouhcine = "/Users/Mouhcine/Documents/workspace/ProjetREI/lemonde-utf8";
-	protected static String DIRNAME_Hamza = "../lemonde-utf8";
+	protected static String DIRNAME = "lemonde-utf8";
+	
 	/**
 	 * Le fichier contenant les mots vides
 	 */
-	private static String STOPWORDS_FILENAME = "/Users/Mouhcine/Documents/Etudes/Traitement de text/TP1/frenchST.txt";
-
+	private static String STOPWORDS_FILENAME = "./frenchST.txt";
 
 	/**
 	 * la méthode \emph{stemming} permettant de raciniser le texte
@@ -245,9 +244,10 @@ public class TFIDF {
 		Normalizer tokenizerAllWords = new FrenchTokenizer();
 		Normalizer tokenizerNoStopWords = new FrenchTokenizer(new File(STOPWORDS_FILENAME));
 
-		getWeightFiles(new File(DIRNAME_Mouhcine),new File(new File(DIRNAME_Mouhcine+"/.."), outDirName),stemmerNoStopWords);
+		getWeightFiles(new File(DIRNAME),new File(new File(DIRNAME+"/.."), outDirName),stemmerNoStopWords);
 
-		
+
+
 	}
 
 }
