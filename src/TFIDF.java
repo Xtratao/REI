@@ -18,7 +18,7 @@ public class TFIDF {
 	 * Le répertoire du corpus
 	 */
 	protected static String DIRNAME_Mouhcine = "/Users/Mouhcine/Documents/workspace/ProjetREI/lemonde-utf8";
-	
+	protected static String DIRNAME_Hamza = "../lemonde-utf8";
 	/**
 	 * Le fichier contenant les mots vides
 	 */
