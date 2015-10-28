@@ -29,6 +29,8 @@ public class ReadXMLFile {
 		{
 			String[] listXMLFiles = new File("subindex/2015/"+d).list();
 			
+
+			
 			for(String XMLFile : listXMLFiles)
 			{
 		
@@ -40,13 +42,17 @@ public class ReadXMLFile {
 				doc.getDocumentElement().normalize();
 				NodeList nList = doc.getElementsByTagName("doc");
 				
+				NodeList date = doc.getElementsByTagName("docs");
+				String dateString = ((Element) date.item(0)).getAttribute("date");
+				
+				
 				for (int i = 0; i < nList.getLength(); i++) 
 				{
 					Node nNode = nList.item(i);
-					Element eElement = (Element) nNode;
+					Element eElement = (Element) nNode;			
 					
-					listDocuments.add(eElement.getAttribute("id")+".txt");
-					System.out.println(eElement.getAttribute("id")+".txt");
+					listDocuments.add(dateString+"_"+eElement.getAttribute("id")+".txt");
+					System.out.println(dateString+"_"+eElement.getAttribute("id")+".txt");
 				}
 			}
 		}
