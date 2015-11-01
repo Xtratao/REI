@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import tools.FrenchStemmer;
 import tools.Normalizer;
 
@@ -15,6 +19,7 @@ public class Indexation {
 	 * Le répertoire du corpus
 	 */
 	protected static String DIRNAME = "lemonde-utf8";
+	protected static String DIRNAME_DATA = "/Users/Mouhcine/Documents";
 	
 	/**
 	 * Le fichier contenant les mots vides
@@ -29,32 +34,36 @@ public class Indexation {
 	 * @param normalizer : the normalizer we want to use
 	 * @return TreeMap<String, TreeSet<String>> : TreeMap of (word, list of the documents where is the word) 
 	 **/
-	public static TreeMap<String, TreeSet<String>> getInvertedFile(File dir,
+	public static TreeMap<String, TreeSet<String>> getInvertedFile(ArrayList<String> listDocumentsName,
 			Normalizer normalizer) throws IOException
 	{
 
 		TreeMap<String, TreeSet<String>> InvertedFile = new TreeMap<String, TreeSet<String>>();
 		ArrayList<String> words;
-		
-		if (dir.isDirectory()) {
-			String[] fileNames = dir.list();
+		String filePath="";
+		int i=0;
 			
-			for (String fileName : fileNames) {
+			for (String file : listDocumentsName) {
+				filePath = DIRNAME_DATA+"/"+file.substring(0, 4)+"/"+file.substring(4,6)+"/"+file.substring(6,8)+"/"+file;
 				
-				words = normalizer.normalize(new File(dir, fileName));
+				if(!new File(filePath).exists())
+					words=new ArrayList<String>();	
+					
+				else
+					words = normalizer.normalize(new File(filePath));
 			
+				
 				for (String word : words) {
 					if(!InvertedFile.containsKey(word))
 						InvertedFile.put(word, new TreeSet<String>());
 					TreeSet<String> listDocuments = new TreeSet<String>();
 					listDocuments = InvertedFile.get(word);
-					listDocuments.add(fileName);					
+					listDocuments.add(file);					
 					
 					InvertedFile.put(word,listDocuments);
 				}
 			}
 			
-		}
 		
 		return InvertedFile;
 	}
@@ -76,10 +85,10 @@ public class Indexation {
 		out.close();
 	}
 	
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException 
 	{
-		saveInvertedFile(getInvertedFile(new File(DIRNAME), new FrenchStemmer()),new File(DIRNAME+"/../fichierInverse.txt"));
-
+		ReadXMLFile.getDocumentsNames();
+		saveInvertedFile(getInvertedFile(ReadXMLFile.listDocuments, new FrenchStemmer()),new File(DIRNAME+"/../fichierInverseData2015.txt"));
 	}
 	
 

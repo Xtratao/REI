@@ -52,7 +52,6 @@ public class ReadXMLFile {
 					Element eElement = (Element) nNode;			
 					
 					listDocuments.add(dateString+"_"+eElement.getAttribute("id")+".txt");
-					System.out.println(dateString+"_"+eElement.getAttribute("id")+".txt");
 				}
 			}
 		}

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,18 +114,18 @@ public class Similarite {
 	 * @throws IOException
 	 */
 
-	public static Map<String, Double> getSimilarDocuments(File file,File dir) throws IOException {
+	public static Map<String, Double> getSimilarDocuments(ArrayList<String> listDocumentTfiDF, File file,File dir) throws IOException {
 
         Map<String, Double> map = new HashMap<String, Double>();
         Map<String, Double> sortedMapAsc = new HashMap<String, Double>();
 		if (dir.isDirectory()) {
-			String[] fileNames = dir.list();
 
 			System.out.print("Scores du similarité entre le fichier "+ file.getName() + " et l'ensemble");
 			System.out.println(" des fichiers du répertoire: " + dir.getName());
 			System.out.println();
 			double score = 0;
-			for (String fileName : fileNames) {
+			
+			for (String fileName : listDocumentTfiDF) {
 				score = getSimilarity(file, new File(dir.getAbsolutePath()+ "/" + fileName));
 				map.put(fileName, score);
 //				System.out.println(fileName+ "\t"+ getSimilarity(file, new File(dir.getAbsolutePath()+ "/" + fileName)));
@@ -139,8 +140,8 @@ public class Similarite {
 		// System.out.println(getSimilarity(new
 		// File(DIRNAME_Mouhcine+"/../outTfIdf/texte.95-1.poids"),new
 		// File(DIRNAME_Mouhcine+"/../outTfIdf/texte.95-1.poids")));
-		Map<String, Double> map = getSimilarDocuments(new File(DIRNAME + "/../outTfIdf/texte.95-1.poids"), new File(DIRNAME + "/../outTfIdf"));
-		SortByValue.printMap(map);
+		//Map<String, Double> map = getSimilarDocuments(new File(DIRNAME + "/../outTfIdf/texte.95-1.poids"), new File(DIRNAME + "/../outTfIdf"));
+		//SortByValue.printMap(map);
 	}
 
 }

@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import tools.FrenchStemmer;
 import tools.FrenchTokenizer;
 import tools.Normalizer;
@@ -18,6 +22,8 @@ public class TFIDF {
 	 * Le répertoire du corpus
 	 */
 	protected static String DIRNAME = "lemonde-utf8";
+	protected static String DIRNAME_DATA = "/Users/Mouhcine/Documents";
+
 	
 	/**
 	 * Le fichier contenant les mots vides
@@ -95,24 +101,32 @@ public class TFIDF {
 	 * @return HashMap<String, Integer> : hashmap of the words and the number of documents where they are
 	 */
 	
-	public static HashMap<String, Integer> getDocumentFrequency(File dir, Normalizer normalizer) throws IOException {
+	public static HashMap<String, Integer> getDocumentFrequency(ArrayList<String> listDocumentsName, Normalizer normalizer) throws IOException {
 		HashMap<String, Integer> hits = new HashMap<String, Integer>();
 		ArrayList<String> wordsInFile;
 		ArrayList<String> words;
 		String wordLC;
-		if (dir.isDirectory()) {
-			// Liste des fichiers du répertoire
-			// ajouter un filtre (FileNameFilter) sur les noms
-			// des fichiers si nécessaire
-			String[] fileNames = dir.list();
+		String filePath = "";
+			// Liste des fichiers à traiter pour le TC du répertoire 2015 (les 10000 fichier listés dans
+			// le répertoir subindex
+	
 			
 			Integer number;
-			for (String fileName : fileNames) {
-				System.err.println("Analyse du fichier " + fileName);
+			for (String file : listDocumentsName) {
+				System.err.println("Analyse du fichier " + file);
 				// Les mots présents dans ce document
 				wordsInFile = new ArrayList<String>();
 				// Appel de la méthode de normalisation
-				words = normalizer.normalize(new File(dir, fileName));
+				if(file.equals("requete.txt"))
+					filePath = "requete.txt";
+				else
+					filePath = DIRNAME_DATA+"/"+file.substring(0, 4)+"/"+file.substring(4,6)+"/"+file.substring(6,8)+"/"+file;
+				
+				if(!new File(filePath).exists())
+					words=new ArrayList<String>();						
+				else
+					words = normalizer.normalize(new File(filePath));
+				
 				// Pour chaque mot de la liste, on remplit un dictionnaire
 				// du nombre d'occurrences pour ce mot
 				for (String word : words) {
@@ -134,7 +148,7 @@ public class TFIDF {
 					}
 				}
 			}
-		}
+		
 	
 		// Affichage du résultat (avec la fréquence)	
 	//	for (Map.Entry<String, Integer> hit : hits.entrySet()) {
@@ -157,10 +171,16 @@ public class TFIDF {
 	public static HashMap<String, Double> getTfIdf(File file, HashMap<String, Integer> dfs, int documentNumber, Normalizer normalizer) throws IOException {
 		HashMap<String, Integer> hits = new HashMap<String, Integer>();
 		// Appel de la méthode de normalisation
-		ArrayList<String> words = normalizer.normalize(file);
+		ArrayList<String> words;
+		
+		if(!file.exists())
+			words=new ArrayList<String>();				
+		else
+			words = normalizer.normalize(file);
+		
 		Integer number;
 
-		// Pour chaque mot de la liste, on remplit un dictionnaire
+		// Pour chaque mot de la liste, on remplit un dictionnaire 'hits (mot,tf)'
 		// du nombre d'occurrences pour ce mot
 		for (String word : words) {
 			word = word.toLowerCase();
@@ -181,7 +201,7 @@ public class TFIDF {
 		Double tfIdf;
 		String word;
 		HashMap<String, Double> tfIdfs = new HashMap<String, Double>();
-
+		
 		// Calcul des tf.idf
 		for (Map.Entry<String, Integer> hit : hits.entrySet()) {
 			tf = hit.getValue();
@@ -189,6 +209,7 @@ public class TFIDF {
 			tfIdf = (double)tf * Math.log((double)documentNumber / (double)dfs.get(word));
 			tfIdfs.put(word, tfIdf);
 		}
+		
 		return tfIdfs;
 	}
 
@@ -204,18 +225,29 @@ public class TFIDF {
 	 * @param indDir : the documents directory
 	 * @param outDir : the directory where we want to put the result files
 	 */
-	private static void getWeightFiles(File inDir, File outDir, Normalizer normalizer) throws IOException {
+	public static void getWeightFiles(ArrayList<String> listDocumentsName, File outDir, Normalizer normalizer) throws IOException {
 		// calcul des dfs
-		HashMap<String, Integer> dfs = getDocumentFrequency(inDir, normalizer);
+		HashMap<String, Integer> dfs = getDocumentFrequency(listDocumentsName, normalizer);
 		// Nombre de documents
-		File[] files = inDir.listFiles();
-		int documentNumber = files.length;
-		if (!outDir.exists()) {
+		int documentNumber = listDocumentsName.size();
+		if (!outDir.exists()) 
 			outDir.mkdirs();
-		}
 		
+		
+		String filePath = "";
+		File file=null;
 		// TfIdfs 
-		for (File file : files) {
+		
+		// On parcours la liste des fichiers qu'on doit traiter
+		for (String fileName : listDocumentsName) {
+			// On chercher le chemin absolu du fichier
+			if(fileName.equals("requete.txt"))
+				filePath = "requete.txt";
+			else
+				filePath = DIRNAME_DATA+"/"+fileName.substring(0, 4)+"/"+fileName.substring(4,6)+"/"+fileName.substring(6,8)+"/"+fileName;
+			
+			// On crée une instance File qui contient le fichier
+			file = new File(filePath);
 			HashMap<String, Double> tfIdfs = getTfIdf(file, dfs, documentNumber, normalizer);
 			TreeSet<String> words = new TreeSet<String>(tfIdfs.keySet());
 			// on écrit dans un fichier
@@ -235,16 +267,17 @@ public class TFIDF {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException 
+	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException 
 	{
-		String outDirName = "outTfIdf";
+		String outDirName = "outTfIdfData2015";
 		
 		Normalizer stemmerAllWords = new FrenchStemmer();
 		Normalizer stemmerNoStopWords = new FrenchStemmer(new File(STOPWORDS_FILENAME));
 		Normalizer tokenizerAllWords = new FrenchTokenizer();
 		Normalizer tokenizerNoStopWords = new FrenchTokenizer(new File(STOPWORDS_FILENAME));
 
-		getWeightFiles(new File(DIRNAME),new File(new File(DIRNAME+"/.."), outDirName),stemmerNoStopWords);
+		ReadXMLFile.getDocumentsNames();
+		getWeightFiles(ReadXMLFile.listDocuments,new File(new File(DIRNAME+"/.."), outDirName),stemmerNoStopWords);
 
 
 

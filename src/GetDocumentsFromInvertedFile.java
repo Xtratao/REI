@@ -25,7 +25,7 @@ public class GetDocumentsFromInvertedFile {
 		invertedFile = new TreeMap<String, TreeSet<String>>();
 		
 		// We create a buffer that contains the inverse file
-		BufferedReader buffer = new BufferedReader(new FileReader("fichierInverse.txt"));
+		BufferedReader buffer = new BufferedReader(new FileReader("fichierInverseData2015.txt"));
 		
 		// We intialize the variables that we gonna use in the loop
 		String line = "";
