@@ -113,7 +113,7 @@ public class TFIDF {
 			
 			Integer number;
 			for (String file : listDocumentsName) {
-				System.err.println("Analyse du fichier " + file);
+				//System.err.println("Analyse du fichier " + file);
 				// Les mots présents dans ce document
 				wordsInFile = new ArrayList<String>();
 				// Appel de la méthode de normalisation

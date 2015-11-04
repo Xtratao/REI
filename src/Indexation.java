@@ -88,7 +88,10 @@ public class Indexation {
 	public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException 
 	{
 		ReadXMLFile.getDocumentsNames();
+		System.out.println("Création du fichier inverse ... ");
 		saveInvertedFile(getInvertedFile(ReadXMLFile.listDocuments, new FrenchStemmer()),new File(DIRNAME+"/../fichierInverseData2015.txt"));
+		System.out.println("Fichier inverse créé à l'emplacement: "+DIRNAME+"/../fichierInverseData2015.txt");
+
 	}
 	
 
