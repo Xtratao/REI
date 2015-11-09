@@ -105,6 +105,38 @@ public class SortByValue
         return sortedMap;
     }
     
+    public static Map<Integer, String> sortByComparatorString(Map<Integer, String> unsortMap, final boolean order)
+    {
+
+        List<Entry<Integer, String>> list = new LinkedList<Entry<Integer, String>>(unsortMap.entrySet());
+
+        // Sorting the list based on values
+        Collections.sort(list, new Comparator<Entry<Integer, String>>()
+        {
+            public int compare(Entry<Integer, String> o1,
+                    Entry<Integer, String> o2)
+            {
+                if (order)
+                {
+                    return o1.getValue().compareTo(o2.getValue());
+                }
+                else
+                {
+                    return o2.getValue().compareTo(o1.getValue());
+
+                }
+            }
+        });
+
+        // Maintaining insertion order with the help of LinkedList
+        Map<Integer, String> sortedMap = new LinkedHashMap<Integer, String>();
+        for (Entry<Integer, String> entry : list)
+        {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
+    }
     
     
 
