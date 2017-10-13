@@ -1,0 +1,36 @@
+Field
+ID_POS_PTF_SAR
+NU_SEQ_SAR
+ID_PRES_SAR
+CD_NATU_SAR
+CD_TYPE_SAR
+CD_ETAT_SAR
+CD_MOTIF_CLO_SAR
+DT_OUV_SAR
+DT_CLO_SAR
+DT_ANNUL_SAR
+
+
+
+Description
+Identifiant position portefeuille: ensemble de clients pour un même portefeuille CC
+Numéro séquentiel SAR: ID SAR
+Code constitué de: code banque + code agence + numéro de compte …
+Nature du SAR: 1 SAR DAR, 2 SAR Prestation, 3 SAR Tiers
+Type SAR: 1 logique, 2 murcef
+état de la SAR: 1 ouvert, 2 fermé, 3 annulé
+à voir
+date ouverture
+date cloture
+
+
+Comment
+
+
+
+
+
+L’état « Annulé » est un état propre à la gestion applicative Nacre, c'est un statut que l'on force via un traitement à la demande (exceptionnel) sur un périmètre ciblé de SAR créée à tort. on cible les SAR et on lance le traitement pour les annuler . Ce qui les rend invisibles à l'utilisateur.
+
+
+
